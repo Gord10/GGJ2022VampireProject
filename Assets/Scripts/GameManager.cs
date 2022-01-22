@@ -4,18 +4,21 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public float blood = 100f;
+    public float blood = 50f;
+    public float maxBlood = 100f;
+
     public float deliverance = 10f;
     public float bloodLoseSpeed = 2f;
 
+    public float minGameX, maxGameX; //Objects will spawn within this X range
+    public float minGameY, maxGameY; //Objects will spawn within this Y range
+
+
     private GameUi gameUi;
-    private float maxBlood; //Assigned at Awake by "blood" variable
 
     private void Awake()
     {
         gameUi = FindObjectOfType<GameUi>();
-        maxBlood = blood;
-
         //gameUi.UpdateDeliveranceBar(deliverance, )
     }
 
@@ -24,6 +27,21 @@ public class GameManager : MonoBehaviour
     {
         
     }
+
+    public Vector2 GetSpawnPoint()
+    {
+        float x = Random.Range(minGameX, maxGameX);
+        float y = Random.Range(minGameY, maxGameY);
+        return new Vector2(x, y);
+    }
+
+    public void ReportFeeding(Villager villager)
+    {
+        blood += villager.blood;
+        blood = Mathf.Clamp(blood, 0, maxBlood);
+        villager.Respawn();
+    }
+
 
     // Update is called once per frame
     void Update()
