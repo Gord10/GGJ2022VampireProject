@@ -11,11 +11,15 @@ public class Player : MonoBehaviour
     private GameManager gameManager;
     private Renderer renderer;
     private CharacterController characterController;
+    private Animator animator;
+
+
     private void Awake()
     {
         rigidbody = GetComponent<Rigidbody>();
         renderer = GetComponent<Renderer>();
         characterController = GetComponent<CharacterController>();
+        animator = GetComponentInChildren<Animator>();
 
         gameManager = FindObjectOfType<GameManager>();
     }
@@ -42,9 +46,11 @@ public class Player : MonoBehaviour
 
         if(movement.x == 0 && movement.z == 0)
         {
+            animator.SetBool("isRunning", false);
             return;
         }
 
+        animator.SetBool("isRunning", true);
         movement = Vector3.ClampMagnitude(movement, 1f);
 
         float angle = Mathf.Atan2(movement.z, -movement.x);
