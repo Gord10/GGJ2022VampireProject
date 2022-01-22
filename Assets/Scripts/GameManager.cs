@@ -19,11 +19,14 @@ public class GameManager : MonoBehaviour
     private int collectedDeliveranceItemAmount = 0;
     private int totalDeliveranceItemAmount = 0; //Assigned at the Awake
     private bool isPlayerCollectingItem = false;
+    private Player player;
+    private DeliveranceItem currentDeliveranceItem;
 
     private void Awake()
     {
         gameUi = FindObjectOfType<GameUi>();
         totalDeliveranceItemAmount = FindObjectsOfType<DeliveranceItem>().Length;
+        player = FindObjectOfType<Player>();
         gameUi.ResetBars(blood / maxBlood);
     }
 
@@ -38,7 +41,7 @@ public class GameManager : MonoBehaviour
         collectedDeliveranceItemAmount++;
         gameUi.UpdateDeliveranceBar(collectedDeliveranceItemAmount, totalDeliveranceItemAmount);
         gameUi.SetDeliveranceIconActivity(false);
-
+        Destroy(currentDeliveranceItem.gameObject);
         if (collectedDeliveranceItemAmount == totalDeliveranceItemAmount)
         {
             SceneManager.LoadScene("Good Ending");
@@ -53,7 +56,11 @@ public class GameManager : MonoBehaviour
         }
 
         isPlayerCollectingItem = true;
-        item.gameObject.SetActive(false);
+        item.transform.SetParent(player.urnPoint);
+        item.transform.localPosition = Vector3.zero;
+        item.transform.localRotation = Quaternion.identity;
+        currentDeliveranceItem = item;
+        //item.gameObject.SetActive(false);
         gameUi.SetDeliveranceIconActivity(true);
     }
 

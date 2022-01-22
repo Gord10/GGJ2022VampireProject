@@ -43,7 +43,7 @@ public class Villager : MonoBehaviour
         distanceFromPlayer.Normalize();
         distanceFromPlayer.y = -10;
 
-        float angle = Mathf.Atan2(distanceFromPlayer.z, -distanceFromPlayer.x);
+        float angle = Mathf.Atan2(-distanceFromPlayer.z, distanceFromPlayer.x);
         angle *= Mathf.Rad2Deg;
         angle -= 90f;
 

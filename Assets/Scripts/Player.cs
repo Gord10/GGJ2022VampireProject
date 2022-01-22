@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
 {
     public float speed = 5f;
     public Transform model;
-         
+    public Transform urnPoint;     
     private Rigidbody rigidbody;
     private GameManager gameManager;
     private Renderer renderer;
