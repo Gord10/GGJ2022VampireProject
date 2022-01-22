@@ -5,16 +5,17 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float speed = 5f;
-
-
-    private Rigidbody2D rigidbody;
+    public Transform model;
+         
+    private Rigidbody rigidbody;
     private GameManager gameManager;
     private Renderer renderer;
-
+    private CharacterController characterController;
     private void Awake()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        rigidbody = GetComponent<Rigidbody>();
         renderer = GetComponent<Renderer>();
+        characterController = GetComponent<CharacterController>();
 
         gameManager = FindObjectOfType<GameManager>();
     }
@@ -34,11 +35,32 @@ public class Player : MonoBehaviour
 
     private void Move()
     {
-        Vector2 movement = new Vector2();
-        movement.x = Input.GetAxis("Horizontal");
-        movement.y = Input.GetAxis("Vertical");
+        Vector3 movement = new Vector2();
+        movement.x = -Input.GetAxis("Horizontal");
+        
+        movement.z = -Input.GetAxis("Vertical");
+
+        if(movement.x == 0 && movement.z == 0)
+        {
+            return;
+        }
+
         movement = Vector3.ClampMagnitude(movement, 1f);
-        rigidbody.velocity = movement * speed;
+
+        float angle = Mathf.Atan2(movement.z, -movement.x);
+        angle *= Mathf.Rad2Deg;
+        angle -= 90f;
+
+        Quaternion targetRotation = Quaternion.Euler(0, angle, 0);
+        model.rotation = Quaternion.RotateTowards(model.rotation, targetRotation, Time.deltaTime * 360);
+
+        movement.y = -10;
+        characterController.Move(movement * Time.deltaTime * speed);
+        //float angle = Mathf.Atan2(movement.x)
+        //Quaternion targetModelRotation = Quaternion.
+
+        //model.up = movement;
+        //rigidbody.velocity = movement * speed;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -52,13 +74,30 @@ public class Player : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+
+    private void OnTriggerEnter(Collider other)
     {
-        string collisionTag = collision.gameObject.tag;
-        if(collisionTag == "DeliveranceItem")
+        string collisionTag = other.gameObject.tag;
+        if (collisionTag == "DeliveranceItem")
         {
-            gameManager.ReportDeliveranceItemCollection();
-            collision.gameObject.SetActive(false);
+            DeliveranceItem item = other.gameObject.GetComponent<DeliveranceItem>();
+            gameManager.ReportDeliveranceItemCollection(item);
+        }
+        else if (collisionTag == "Coffin")
+        {
+            gameManager.ReportBringingDeliveranceItem();
         }
     }
+
+
+    private void OnControllerColliderHit(ControllerColliderHit hit)
+    {
+        if(hit.gameObject.tag == "Villager")
+        {
+            Villager villager = hit.gameObject.GetComponent<Villager>();
+            gameManager.ReportFeeding(villager);
+            print("Hitting villager");
+        }
+    }
+
 }

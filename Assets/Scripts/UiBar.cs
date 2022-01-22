@@ -21,6 +21,11 @@ public class UiBar : MonoBehaviour
 
     public void SetValueInstantly(float value)
     {
+        if(barImage == null)
+        {
+            barImage = GetComponent<Image>();
+        }
+
         barImage.fillAmount = value;
         targetValue = value;
     }

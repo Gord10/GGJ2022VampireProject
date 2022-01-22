@@ -13,11 +13,12 @@ public class GameManager : MonoBehaviour
 
     public float minGameX, maxGameX; //Objects will spawn within this X range
     public float minGameY, maxGameY; //Objects will spawn within this Y range
-
+    public LayerMask groundLayerMask;
 
     private GameUi gameUi;
     private int collectedDeliveranceItemAmount = 0;
     private int totalDeliveranceItemAmount = 0; //Assigned at the Awake
+    private bool isPlayerCollectingItem = false;
 
     private void Awake()
     {
@@ -26,15 +27,34 @@ public class GameManager : MonoBehaviour
         gameUi.ResetBars(blood / maxBlood);
     }
 
-    public void ReportDeliveranceItemCollection()
+    public void ReportBringingDeliveranceItem()
     {
+        if(!isPlayerCollectingItem)
+        {
+            return;
+        }
+
+        isPlayerCollectingItem = false;
         collectedDeliveranceItemAmount++;
         gameUi.UpdateDeliveranceBar(collectedDeliveranceItemAmount, totalDeliveranceItemAmount);
+        gameUi.SetDeliveranceIconActivity(false);
 
-        if(collectedDeliveranceItemAmount == totalDeliveranceItemAmount)
+        if (collectedDeliveranceItemAmount == totalDeliveranceItemAmount)
         {
             SceneManager.LoadScene("Good Ending");
         }
+    }
+
+    public void ReportDeliveranceItemCollection(DeliveranceItem item)
+    {
+        if(isPlayerCollectingItem)
+        {
+            return;
+        }
+
+        isPlayerCollectingItem = true;
+        item.gameObject.SetActive(false);
+        gameUi.SetDeliveranceIconActivity(true);
     }
 
 
@@ -47,8 +67,26 @@ public class GameManager : MonoBehaviour
     public Vector2 GetSpawnPoint()
     {
         float x = Random.Range(minGameX, maxGameX);
-        float y = Random.Range(minGameY, maxGameY);
-        return new Vector2(x, y);
+        float z = Random.Range(minGameY, maxGameY);
+
+        Vector3 point = new Vector3(x, 0, z);
+        Ray ray = new Ray(point, Vector3.up);
+        RaycastHit hit;
+
+        if(Physics.Raycast(ray, out hit, 10000, groundLayerMask)) 
+        {
+            print("sdsd");
+            return hit.point;
+        }
+
+        ray.direction = Vector3.down;
+
+        if (Physics.Raycast(ray, out hit, 10000, groundLayerMask))
+        {
+            return hit.point;
+        }
+
+        return point;
     }
 
     public void ReportFeeding(Villager villager)

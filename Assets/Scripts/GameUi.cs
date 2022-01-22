@@ -6,6 +6,17 @@ using UnityEngine.UI;
 public class GameUi : MonoBehaviour
 {
     public UiBar bloodBar, deliveranceBar;
+    public GameObject deliveranceIcon;
+
+    private void Awake()
+    {
+        SetDeliveranceIconActivity(false);
+    }
+
+    public void SetDeliveranceIconActivity(bool isActive)
+    {
+        deliveranceIcon.SetActive(isActive);
+    }
 
     public void UpdateBloodBar(float currentValue, float maxValue)
     {
