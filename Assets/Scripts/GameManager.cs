@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -29,6 +30,11 @@ public class GameManager : MonoBehaviour
     {
         collectedDeliveranceItemAmount++;
         gameUi.UpdateDeliveranceBar(collectedDeliveranceItemAmount, totalDeliveranceItemAmount);
+
+        if(collectedDeliveranceItemAmount == totalDeliveranceItemAmount)
+        {
+            SceneManager.LoadScene("Good Ending");
+        }
     }
 
 
@@ -48,6 +54,13 @@ public class GameManager : MonoBehaviour
     public void ReportFeeding(Villager villager)
     {
         blood += villager.blood;
+
+        if(blood >= maxBlood)
+        {
+            SceneManager.LoadScene("Bad Ending");
+            return;
+        }
+
         blood = Mathf.Clamp(blood, 0, maxBlood);
         villager.Respawn();
     }
@@ -57,8 +70,14 @@ public class GameManager : MonoBehaviour
     void Update()
     {
         blood -= bloodLoseSpeed * Time.deltaTime;
+
+        if(blood <= 0)
+        {
+            string currentSceneName = SceneManager.GetActiveScene().name;
+            SceneManager.LoadScene(currentSceneName);
+        }
         gameUi.UpdateBloodBar(blood, maxBlood);
-
-
     }
+
+
 }

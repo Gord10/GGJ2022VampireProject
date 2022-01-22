@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 6
-  blood: 10
+  blood: 40
   minDistanceToRunFromPlayer: 25
 --- !u!50 &7719518428584538278
 Rigidbody2D:
