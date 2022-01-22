@@ -42,5 +42,12 @@ public class StoryManager : MonoBehaviour
 
             text.text = storyLines[textCounter];
         }
+
+#if UNITY_STANDALONE
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+#endif
     }
 }

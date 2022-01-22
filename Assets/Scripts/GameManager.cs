@@ -77,6 +77,13 @@ public class GameManager : MonoBehaviour
             SceneManager.LoadScene(currentSceneName);
         }
         gameUi.UpdateBloodBar(blood, maxBlood);
+
+#if UNITY_STANDALONE
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+#endif
     }
 
 
