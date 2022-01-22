@@ -51,4 +51,14 @@ public class Player : MonoBehaviour
             gameManager.ReportFeeding(villager);
         }
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        string collisionTag = collision.gameObject.tag;
+        if(collisionTag == "DeliveranceItem")
+        {
+            gameManager.ReportDeliveranceItemCollection();
+            collision.gameObject.SetActive(false);
+        }
+    }
 }

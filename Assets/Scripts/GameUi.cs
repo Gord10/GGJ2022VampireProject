@@ -5,16 +5,23 @@ using UnityEngine.UI;
 
 public class GameUi : MonoBehaviour
 {
-    public Image bloodBar, deliveranceBar;
+    public UiBar bloodBar, deliveranceBar;
 
     public void UpdateBloodBar(float currentValue, float maxValue)
     {
-        bloodBar.fillAmount = currentValue / maxValue;
+        bloodBar.SetTargetValue(currentValue / maxValue);
     }
 
     public void UpdateDeliveranceBar(float currentValue, float maxValue)
     {
-        deliveranceBar.fillAmount = currentValue / maxValue;
+        deliveranceBar.SetTargetValue(currentValue / maxValue);
     }
+
+    public void ResetBars(float bloodValue, float deliveranceValue = 0f)
+    {
+        bloodBar.SetValueInstantly(bloodValue);
+        deliveranceBar.SetValueInstantly(deliveranceValue);
+    }
+
 
 }

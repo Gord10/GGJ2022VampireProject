@@ -15,12 +15,22 @@ public class GameManager : MonoBehaviour
 
 
     private GameUi gameUi;
+    private int collectedDeliveranceItemAmount = 0;
+    private int totalDeliveranceItemAmount = 0; //Assigned at the Awake
 
     private void Awake()
     {
         gameUi = FindObjectOfType<GameUi>();
-        //gameUi.UpdateDeliveranceBar(deliverance, )
+        totalDeliveranceItemAmount = FindObjectsOfType<DeliveranceItem>().Length;
+        gameUi.ResetBars(blood / maxBlood);
     }
+
+    public void ReportDeliveranceItemCollection()
+    {
+        collectedDeliveranceItemAmount++;
+        gameUi.UpdateDeliveranceBar(collectedDeliveranceItemAmount, totalDeliveranceItemAmount);
+    }
+
 
     // Start is called before the first frame update
     void Start()

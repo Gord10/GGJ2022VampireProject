@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Villager
   - Environment
+  - DeliveranceItem
   layers:
   - Default
   - TransparentFX
