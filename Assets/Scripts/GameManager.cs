@@ -28,7 +28,7 @@ public class GameManager : MonoBehaviour
         totalDeliveranceItemAmount = FindObjectsOfType<DeliveranceItem>().Length;
         player = FindObjectOfType<Player>();
         gameUi.ResetBars(blood / maxBlood);
-        gameUi.UpdateDeliveranceBar(collectedDeliveranceItemAmount, totalDeliveranceItemAmount);
+        gameUi.UpdateDeliveranceBar(deliverance, 100);
     }
 
     public void ReportBringingDeliveranceItem()
@@ -40,10 +40,16 @@ public class GameManager : MonoBehaviour
 
         isPlayerCollectingItem = false;
         collectedDeliveranceItemAmount++;
-        gameUi.UpdateDeliveranceBar(collectedDeliveranceItemAmount, totalDeliveranceItemAmount);
+        deliverance += currentDeliveranceItem.deliverance;
+
+        gameUi.UpdateDeliveranceBar(deliverance, 100);
         gameUi.SetDeliveranceIconActivity(false);
-        Destroy(currentDeliveranceItem.gameObject);
-        if (collectedDeliveranceItemAmount == totalDeliveranceItemAmount)
+
+        currentDeliveranceItem.transform.SetParent(null);
+        currentDeliveranceItem.transform.position = GetSpawnPoint();
+        
+        //Destroy(currentDeliveranceItem.gameObject);
+        if (deliverance >= 100f)
         {
             SceneManager.LoadScene("Good Ending");
         }
@@ -77,36 +83,41 @@ public class GameManager : MonoBehaviour
         
     }
 
-    public Vector2 GetSpawnPoint()
+    public Vector3 GetSpawnPoint()
     {
         float x = Random.Range(minGameX, maxGameX);
         float z = Random.Range(minGameY, maxGameY);
 
         Vector3 point = new Vector3(x, 0, z);
-        Ray ray = new Ray(point, Vector3.up);
+        Ray ray = new Ray(point, Vector3.up * 10000f);
         RaycastHit hit;
 
-        if(Physics.Raycast(ray, out hit, 10000, groundLayerMask)) 
+        if(Physics.Raycast(ray, out hit, 1000, groundLayerMask)) 
         {
-            print("sdsd");
+            //print("sdsd");
             return hit.point;
         }
 
-        ray.direction = Vector3.down;
+        ray.direction = Vector3.down * 10000;
 
-        if (Physics.Raycast(ray, out hit, 10000, groundLayerMask))
+        if (Physics.Raycast(ray, out hit, 1000, groundLayerMask))
         {
+            //print("dfdf");
             return hit.point;
         }
 
+        //print("Random point: " + point.ToString());
         return point;
     }
 
     public void ReportFeeding(Villager villager)
     {
         blood += villager.blood;
+        deliverance -= villager.deliveranceLose;
+        gameUi.UpdateDeliveranceBar(deliverance, 100f);
 
-        if(blood >= maxBlood)
+
+        if(deliverance <= 0f)
         {
             SceneManager.LoadScene("Bad Ending");
             return;

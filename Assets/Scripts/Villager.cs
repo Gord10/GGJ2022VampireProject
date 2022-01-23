@@ -7,6 +7,7 @@ public class Villager : MonoBehaviour
     public float speed = 4f;
     public float blood = 10f; //The blood that vampire will gain from feeding from the villager
     public float minDistanceToRunFromPlayer = 15f; //If the distance is longer than this value, don't run from the player
+    public float deliveranceLose = 20f;
     private Rigidbody2D rigidbody2D;
     private CharacterController characterController;
    
@@ -80,6 +81,6 @@ public class Villager : MonoBehaviour
         characterController.enabled = false;
         transform.position = gameManager.GetSpawnPoint();
         characterController.enabled = true;
-        print("Respawn");
+        //print("Respawn");
     }
 }
