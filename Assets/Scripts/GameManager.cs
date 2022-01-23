@@ -28,6 +28,7 @@ public class GameManager : MonoBehaviour
         totalDeliveranceItemAmount = FindObjectsOfType<DeliveranceItem>().Length;
         player = FindObjectOfType<Player>();
         gameUi.ResetBars(blood / maxBlood);
+        gameUi.UpdateDeliveranceBar(collectedDeliveranceItemAmount, totalDeliveranceItemAmount);
     }
 
     public void ReportBringingDeliveranceItem()

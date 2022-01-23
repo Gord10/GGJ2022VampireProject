@@ -7,6 +7,7 @@ public class GameUi : MonoBehaviour
 {
     public UiBar bloodBar, deliveranceBar;
     public GameObject deliveranceIcon;
+    public Text urnsText;
 
     private void Awake()
     {
@@ -23,9 +24,10 @@ public class GameUi : MonoBehaviour
         bloodBar.SetTargetValue(currentValue / maxValue);
     }
 
-    public void UpdateDeliveranceBar(float currentValue, float maxValue)
+    public void UpdateDeliveranceBar(int currentValue, int maxValue)
     {
-        deliveranceBar.SetTargetValue(currentValue / maxValue);
+        //deliveranceBar.SetTargetValue(currentValue / maxValue);
+        urnsText.text = "Goblets: " + currentValue + "/" + maxValue;
     }
 
     public void ResetBars(float bloodValue, float deliveranceValue = 0f)
