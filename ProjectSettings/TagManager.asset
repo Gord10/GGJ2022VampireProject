@@ -8,6 +8,7 @@ TagManager:
   - DeliveranceItem
   - Environment
   - Coffin
+  - Ghost
   layers:
   - Default
   - TransparentFX

@@ -84,17 +84,30 @@ public class Player : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         string collisionTag = other.gameObject.tag;
-        if (collisionTag == "DeliveranceItem")
+        if(collisionTag == "DeliveranceItem")
         {
             DeliveranceItem item = other.gameObject.GetComponent<DeliveranceItem>();
             gameManager.ReportDeliveranceItemCollection(item);
         }
-        else if (collisionTag == "Coffin")
+        else if(collisionTag == "Coffin")
         {
             gameManager.ReportBringingDeliveranceItem();
         }
+        else if(collisionTag == "Ghost")
+        {
+
+        }
     }
 
+    private void OnTriggerStay(Collider other)
+    {
+        string collisionTag = other.gameObject.tag;
+        if (collisionTag == "Ghost")
+        {
+            Ghost ghost = other.gameObject.GetComponent<Ghost>();
+            gameManager.ReportGhostTouch(ghost);
+        }
+    }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {

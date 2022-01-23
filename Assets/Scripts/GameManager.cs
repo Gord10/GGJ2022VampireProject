@@ -48,6 +48,11 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ReportGhostTouch(Ghost ghost)
+    {
+        blood -= ghost.damagePerSecond * Time.fixedDeltaTime;
+    }
+
     public void ReportDeliveranceItemCollection(DeliveranceItem item)
     {
         if(isPlayerCollectingItem)
