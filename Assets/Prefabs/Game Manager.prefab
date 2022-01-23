@@ -46,7 +46,7 @@ MonoBehaviour:
   blood: 50
   maxBlood: 100
   deliverance: 10
-  bloodLoseSpeed: 2
+  bloodLoseSpeed: 1
   minGameX: -15
   maxGameX: 15
   minGameY: -15
